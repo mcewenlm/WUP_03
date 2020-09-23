@@ -16,7 +16,9 @@ davisdata <- read.csv(file="UCDavis.csv")
 ```
 ## Our Goal is to answer this question Is there a difference between the alcohol consumed between the row
 ## you choose to sit in??
-
+$H_0$ There is no difference in alcohol consumption based on seat choice.  
+$H_A$ There is a difference in alcohol consumption based on seat choice.   
+  
 ## Now with ggplot - first select the basic data
 
 ```{r}
@@ -35,10 +37,24 @@ basicCN + geom_boxplot()
 basicCN + geom_boxplot(notch=TRUE,outlier.color = "red") + stat_boxplot(geom ='errorbar') + labs(title="Fancy notch boxplot \n with 2 lines")
 ```
 
-## Numerical Summarys 
+## Numerical Summarys
+```{r}
+favstats(alcohol~Seat,data=davisdata)
+```
 
 ## Inferential Tests
+```{r}
+model1 <- aov(alcohol~Seat,data=davisdata)
+summary.aov(model1)
+```
+```{r}
+#we specify the margins starting at the bottom and proceeding clockwise - thus 8.7 is the left side margin to hold the names of the factors
+par(mar = c(3, 8.7, 2, 2))
+plot(TukeyHSD(model1),las=2)
+```  
+  
+## Conclusions  
+There is not a difference in the front-back and middle-back seats but the middle-front is different from both the previous two. 
 
-## Conclusions
-
+The p-value is 0.000116 which is less than 0.5, so we reject the null hypothesis. There is a difference in alcohol consumption based on seat choice. 
 
